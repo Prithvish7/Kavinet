@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Contact — KaviNet{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+
+      <div class="kv-card mt-2">
+        <div class="text-center mb-4">
+          <i class="bi bi-envelope-heart"
+             style="font-size:2rem;color:var(--kv-accent);"></i>
+          <h4 class="mt-2" style="font-family:'Playfair Display',serif;">
+            Contact KaviNet
+          </h4>
+          <p class="text-muted" style="font-size:0.875rem;">
+            Have a question, suggestion, or issue?<br/>
+            We'd love to hear from you.
+          </p>
+        </div>
+
+        <form method="POST">
+          <div class="mb-3">
+            <label class="kv-label form-label">Your Name</label>
+            <input type="text" name="name" class="form-control kv-input"
+                   placeholder="Your full name" required/>
+          </div>
+          <div class="mb-3">
+            <label class="kv-label form-label">Email</label>
+            <input type="email" name="email" class="form-control kv-input"
+                   placeholder="you@example.com" required/>
+          </div>
+          <div class="mb-3">
+            <label class="kv-label form-label">Subject</label>
+            <select name="subject" class="form-select kv-input">
+              <option value="" disabled selected>Select a topic</option>
+              <option>General Inquiry</option>
+              <option>Report a Bug</option>
+              <option>Feature Request</option>
+              <option>Account Issue</option>
+              <option>Content Removal Request</option>
+              <option>Partnership / Collaboration</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="kv-label form-label">Message</label>
+            <textarea name="message" class="form-control kv-input" rows="5"
+                      placeholder="Write your message here…" required></textarea>
+          </div>
+          <button type="submit" class="btn kv-btn-accent w-100">
+            <i class="bi bi-send"></i> Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Info cards -->
+      <div class="row g-3 mt-2 mb-4">
+        <div class="col-4">
+          <div class="kv-card text-center py-3">
+            <i class="bi bi-envelope" style="color:var(--kv-accent);font-size:1.3rem;"></i>
+            <p class="mb-0 mt-2" style="font-size:0.78rem;color:var(--kv-muted);">Email us</p>
+            <p class="mb-0" style="font-size:0.78rem;">hello@kavinet.in</p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="kv-card text-center py-3">
+            <i class="bi bi-clock" style="color:var(--kv-accent);font-size:1.3rem;"></i>
+            <p class="mb-0 mt-2" style="font-size:0.78rem;color:var(--kv-muted);">Response time</p>
+            <p class="mb-0" style="font-size:0.78rem;">Within 24 hrs</p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="kv-card text-center py-3">
+            <i class="bi bi-heart" style="color:var(--kv-accent);font-size:1.3rem;"></i>
+            <p class="mb-0 mt-2" style="font-size:0.78rem;color:var(--kv-muted);">Made with</p>
+            <p class="mb-0" style="font-size:0.78rem;">Love for writers</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

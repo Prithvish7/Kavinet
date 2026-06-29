@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}{{ user[1] }} — KaviNet{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- ─── PROFILE HEADER ─── -->
+  <div class="kv-card mb-4">
+    <div class="d-flex align-items-center gap-4 flex-wrap">
+
+      <!-- Avatar -->
+      <div class="kv-avatar-circle-lg">
+        {{ user[1][0].upper() }}
+      </div>
+
+      <!-- Info -->
+      <div class="flex-grow-1">
+        <h4 style="font-family:'Playfair Display',serif;margin-bottom:0.2rem;">
+          {{ user[1] }}
+        </h4>
+        <p class="text-muted mb-2" style="font-size:0.875rem;">
+          {{ user[4] or 'No bio yet.' }}
+        </p>
+        <div class="d-flex gap-3 mb-3" style="font-size:0.85rem;color:var(--kv-muted);">
+          <span><strong style="color:var(--kv-text);">{{ poems|length }}</strong> Writings</span>
+          <span><strong style="color:var(--kv-text);">{{ followers }}</strong> Followers</span>
+          <span><strong style="color:var(--kv-text);">{{ following }}</strong> Following</span>
+          <span><strong style="color:var(--kv-text);">{{ books|length }}</strong> Books</span>
+        </div>
+
+        <!-- Social links -->
+        <div class="d-flex gap-2 flex-wrap">
+          {% if user[6] %}
+          <a href="{{ user[6] }}" target="_blank" class="kv-social-btn kv-fb">
+            <i class="bi bi-facebook"></i> Facebook
+          </a>
+          {% endif %}
+          {% if user[7] %}
+          <a href="https://instagram.com/{{ user[7] }}" target="_blank" class="kv-social-btn kv-ig">
+            <i class="bi bi-instagram"></i> Instagram
+          </a>
+          {% endif %}
+          {% if user[8] %}
+          <a href="https://wa.me/{{ user[8] }}" target="_blank" class="kv-social-btn kv-wa">
+            <i class="bi bi-whatsapp"></i> WhatsApp
+          </a>
+          {% endif %}
+          {% if user[9] %}
+          <a href="https://twitter.com/{{ user[9] }}" target="_blank" class="kv-social-btn kv-tw">
+            <i class="bi bi-twitter-x"></i> Twitter
+          </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="d-flex flex-column gap-2">
+        {% if session.get('user_id') and session['username'] != user[1] %}
+        <a href="{{ url_for('follow', user_id=user[0]) }}" class="btn kv-btn-accent">
+          <i class="bi bi-person-plus"></i> Follow
+        </a>
+        {% elif session.get('username') == user[1] %}
+        <a href="{{ url_for('edit_profile') }}" class="btn kv-btn-accent">
+          <i class="bi bi-pencil"></i> Edit Profile
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn kv-btn-outline">
+          <i class="bi bi-grid"></i> Dashboard
+        </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── THIS WAS MISSING ─── -->
+  <div class="row">
+
+    <!-- ─── LEFT: WRITINGS ─── -->
+    <div class="col-lg-8">
+
+      <h5 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">
+        <i class="bi bi-pencil"></i> Writings
+      </h5>
+
+      {% if poems %}
+        {% for poem in poems %}
+        <div class="kv-card">
+          <span class="kv-genre-badge">{{ poem[4] or 'General' }}</span>
+          <div class="kv-card-title">{{ poem[2] }}</div>
+          <div class="kv-card-meta">
+            <i class="bi bi-clock"></i> {{ poem[6].strftime('%b %d, %Y') }}
+            &nbsp;·&nbsp;
+            <i class="bi bi-heart"></i> {{ poem[8] or 0 }} likes
+          </div>
+          <div class="kv-card-body">
+            {{ poem[3][:250] }}{% if poem[3]|length > 250 %}…{% endif %}
+          </div>
+          <div class="mt-3">
+            <a href="{{ url_for('like', poem_id=poem[0]) }}"
+               class="btn kv-btn-outline btn-sm">
+              <i class="bi bi-heart"></i> {{ poem[8] or 0 }}
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="kv-card text-center py-4">
+          <i class="bi bi-pencil-square"
+             style="font-size:2rem;color:var(--kv-accent);"></i>
+          <p class="mt-3 text-muted">No writings yet.</p>
+        </div>
+      {% endif %}
+
+    </div>
+
+    <!-- ─── RIGHT: BOOKS ─── -->
+    <div class="col-lg-4">
+
+      <h5 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">
+        <i class="bi bi-book"></i> Books
+      </h5>
+
+      {% if books %}
+        {% for book in books %}
+        <div class="kv-card mb-3">
+          <div class="kv-book-cover-sm mb-2">
+            <i class="bi bi-book"></i>
+          </div>
+          <span class="kv-genre-badge">{{ book[6] or 'General' }}</span>
+          <div class="kv-card-title mt-1" style="font-size:1rem;">{{ book[2] }}</div>
+          <p style="font-size:0.82rem;color:#4a4540;margin-bottom:0.5rem;">
+            {{ book[3][:80] }}{% if book[3] and book[3]|length > 80 %}…{% endif %}
+          </p>
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="kv-price" style="font-size:1rem;">
+              ₹{{ "%.2f"|format(book[4]) }}
+            </span>
+            {% if session.get('user_id') and session['username'] != user[1] %}
+            <a href="{{ url_for('buy_book', book_id=book[0]) }}"
+               class="btn kv-btn-accent btn-sm">Buy</a>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="kv-card text-center py-4">
+          <i class="bi bi-book"
+             style="font-size:2rem;color:var(--kv-accent);"></i>
+          <p class="mt-3 text-muted" style="font-size:0.875rem;">
+            No books listed yet.
+          </p>
+        </div>
+      {% endif %}
+
+      <!-- Joined date -->
+      <div class="kv-card text-center mt-3">
+        <i class="bi bi-calendar3"
+           style="color:var(--kv-accent);font-size:1.2rem;"></i>
+        <p class="mb-0 mt-2" style="font-size:0.82rem;color:var(--kv-muted);">
+          Member since<br/>
+          <strong style="color:var(--kv-text);">
+            {{ user[5].strftime('%B %Y') }}
+          </strong>
+        </p>
+      </div>
+
+    </div>
+
+  </div><!-- end row -->
+
+</div><!-- end container -->
+{% endblock %}

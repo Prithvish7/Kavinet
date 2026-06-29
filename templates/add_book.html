@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}List a Book — KaviNet{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="kv-card mt-2">
+
+        <div class="mb-4">
+          <h4 style="font-family:'Playfair Display',serif;margin-bottom:0.25rem;">
+            <i class="bi bi-book" style="color:var(--kv-accent);"></i> List Your Book
+          </h4>
+          <p class="text-muted mb-0" style="font-size:0.875rem;">
+            Add your book to the KaviNet marketplace
+          </p>
+        </div>
+
+        <form method="POST">
+          <div class="mb-3">
+            <label class="kv-label form-label">Book Title</label>
+            <input type="text" name="title" class="form-control kv-input"
+                   placeholder="Title of your book" required/>
+          </div>
+
+          <div class="mb-3">
+            <label class="kv-label form-label">Genre</label>
+            <select name="genre" class="form-select kv-input" required>
+              <option value="" disabled selected>Select genre</option>
+              <option value="Poetry">🌸 Poetry</option>
+              <option value="Fiction">📖 Fiction</option>
+              <option value="Non-Fiction">📝 Non-Fiction</option>
+              <option value="Short Stories">✨ Short Stories</option>
+              <option value="Novel">📚 Novel</option>
+              <option value="Essay Collection">✍️ Essay Collection</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="kv-label form-label">Description</label>
+            <textarea name="description" class="form-control kv-input"
+                      rows="4" placeholder="What is your book about?"></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="kv-label form-label">Price (₹)</label>
+            <input type="number" name="price" class="form-control kv-input"
+                   placeholder="e.g. 299" min="0" step="0.01" required/>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn kv-btn-accent px-4">
+              <i class="bi bi-check-lg"></i> List Book
+            </button>
+            <a href="{{ url_for('marketplace') }}" class="btn kv-btn-outline px-4">
+              Cancel
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

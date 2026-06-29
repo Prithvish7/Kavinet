@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Write — KaviNet{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="kv-card mt-2">
+        <div class="mb-4">
+          <h4 style="font-family:'Playfair Display',serif;margin-bottom:0.25rem;">
+            <i class="bi bi-pencil-square" style="color:var(--kv-accent);"></i> Write Something
+          </h4>
+          <p class="text-muted mb-0" style="font-size:0.875rem;">
+            Share your poem, song, prose, or story with the world
+          </p>
+        </div>
+
+        <form method="POST">
+
+          <!-- Title -->
+          <div class="mb-3">
+            <label class="kv-label form-label">Title</label>
+            <input type="text" name="title" class="form-control kv-input"
+                   placeholder="Give your writing a title…" required/>
+          </div>
+
+          <!-- Genre -->
+          <div class="mb-3">
+            <label class="kv-label form-label">Category</label>
+            <select name="genre" class="form-select kv-input" required>
+              <option value="" disabled selected>Select a category</option>
+              <option value="Poem">🌸 Poem</option>
+              <option value="Song">🎵 Song</option>
+              <option value="Prose">📝 Prose</option>
+              <option value="Short Story">📖 Short Story</option>
+              <option value="Essay">✍️ Essay</option>
+              <option value="Novel">📚 Novel Excerpt</option>
+            </select>
+          </div>
+
+          <!-- Content -->
+          <div class="mb-4">
+            <label class="kv-label form-label">Your Writing</label>
+            <textarea name="content" class="form-control kv-input kv-textarea"
+                      placeholder="Start writing here…" required></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn kv-btn-accent px-4">
+              <i class="bi bi-send"></i> Publish
+            </button>
+            <a href="{{ url_for('dashboard') }}" class="btn kv-btn-outline px-4">
+              Cancel
+            </a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

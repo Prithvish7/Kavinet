@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Search — KaviNet{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Search bar (big) -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-6">
+      <form action="{{ url_for('search') }}" method="GET" class="d-flex">
+        <input type="search" name="q" class="form-control kv-input"
+               placeholder="Search poems, books, writers…"
+               value="{{ query }}" style="border-radius:20px 0 0 20px;"/>
+        <button class="btn kv-btn-accent" type="submit"
+                style="border-radius:0 20px 20px 0;padding:0 1.2rem;">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {% if query %}
+  <p class="text-muted mb-4" style="font-size:0.9rem;">
+    Results for <strong>"{{ query }}"</strong> —
+    {{ poems|length + books|length + users|length }} found
+  </p>
+
+  <!-- ─── WRITERS ─── -->
+  {% if users %}
+  <h5 style="font-family:'Playfair Display',serif;" class="mb-3">
+    <i class="bi bi-people"></i> Writers
+  </h5>
+  <div class="row g-3 mb-4">
+    {% for user in users %}
+    <div class="col-md-3 col-sm-6">
+      <a href="{{ url_for('profile', username=user[1]) }}"
+         style="text-decoration:none;">
+        <div class="kv-card text-center py-3">
+          <div class="kv-avatar-circle mx-auto mb-2">
+            {{ user[1][0].upper() }}
+          </div>
+          <div style="font-weight:500;font-size:0.9rem;">{{ user[1] }}</div>
+          <div style="font-size:0.78rem;color:var(--kv-muted);">Writer</div>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ─── POEMS ─── -->
+  {% if poems %}
+  <h5 style="font-family:'Playfair Display',serif;" class="mb-3">
+    <i class="bi bi-pencil"></i> Writings
+  </h5>
+  {% for poem in poems %}
+  <div class="kv-card mb-3">
+    <span class="kv-genre-badge">{{ poem[4] or 'General' }}</span>
+    <div class="kv-card-title">{{ poem[2] }}</div>
+    <div class="kv-card-meta">
+      by <a href="{{ url_for('profile', username=poem[7]) }}"
+            style="color:inherit;text-decoration:none;">{{ poem[7] }}</a>
+      · {{ poem[6].strftime('%b %d, %Y') }}
+    </div>
+    <div class="kv-card-body">
+      {{ poem[3][:200] }}{% if poem[3]|length > 200 %}…{% endif %}
+    </div>
+    <div class="mt-2">
+      <a href="{{ url_for('like', poem_id=poem[0]) }}" class="btn kv-btn-outline btn-sm">
+        <i class="bi bi-heart"></i> {{ poem[8] or 0 }}
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <!-- ─── BOOKS ─── -->
+  {% if books %}
+  <h5 style="font-family:'Playfair Display',serif;" class="mb-3 mt-4">
+    <i class="bi bi-book"></i> Books
+  </h5>
+  <div class="row g-3">
+    {% for book in books %}
+    <div class="col-md-4">
+      <div class="kv-card h-100">
+        <div class="kv-book-cover mb-3">
+          <i class="bi bi-book"></i>
+        </div>
+        <span class="kv-genre-badge">{{ book[6] or 'General' }}</span>
+        <div class="kv-card-title mt-1">{{ book[2] }}</div>
+        <div class="kv-card-meta">
+          by <a href="{{ url_for('profile', username=book[8]) }}"
+                style="color:inherit;text-decoration:none;">{{ book[8] }}</a>
+        </div>
+        <div class="d-flex align-items-center justify-content-between mt-2">
+          <span class="kv-price">₹{{ "%.2f"|format(book[4]) }}</span>
+          <a href="{{ url_for('buy_book', book_id=book[0]) }}"
+             class="btn kv-btn-accent btn-sm">Buy Now</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Nothing found -->
+  {% if not poems and not books and not users %}
+  <div class="kv-card text-center py-5">
+    <i class="bi bi-search" style="font-size:2rem;color:var(--kv-accent);"></i>
+    <p class="mt-3 text-muted">No results found for "{{ query }}"</p>
+    <p style="font-size:0.875rem;color:var(--kv-muted);">
+      Try a different keyword or browse the feed.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn kv-btn-outline mt-2">Back to Feed</a>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <!-- No query yet -->
+  <div class="kv-card text-center py-5">
+    <i class="bi bi-search" style="font-size:2rem;color:var(--kv-accent);"></i>
+    <p class="mt-3 text-muted">Type something in the search bar above.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
